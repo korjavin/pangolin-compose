@@ -7,7 +7,6 @@ services:
     command: >
       bash -c "
         if [ ! -f /config/config.yml ]; then
-          SECRET=$(openssl rand -hex 32)
           cat > /config/config.yml <<EOF
         app:
           dashboard_url: "https://$PANGOLIN_HOST"
