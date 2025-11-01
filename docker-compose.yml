@@ -41,6 +41,8 @@ services:
       - --remoteConfig=http://pangolin:3001/api/v1/
     volumes:
       - pangolin-data:/var/config
+    cap_add:
+      - NET_ADMIN
     ports:
       - 51820:51820/udp
       - 21820:21820/udp
