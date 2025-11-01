@@ -1,0 +1,53 @@
+services:
+  pangolin:
+    image: fosrl/pangolin:1.11.0 # https://github.com/fosrl/pangolin/releases
+    container_name: pangolin
+    restart: unless-stopped
+    volumes:
+      - pangolin-config:/app/config # Changed to a named volume
+      - pangolin-data:/var/certificates
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3001/api/v1/"]
+      interval: "3s"
+      timeout: "3s"
+      retries: 15
+    environment:
+      - PANGOLIN_HOST=${PANGOLIN_HOST}
+    networks:
+      - pangolin-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.pangolin.rule=Host(`${PANGOLIN_HOST}`)"
+      - "traefik.http.routers.pangolin.entrypoints=websecure"
+      - "traefik.http.routers.pangolin.tls.certresolver=myresolver"
+
+  gerbil:
+    image: fosrl/gerbil:1.2.2
+    container_name: gerbil
+    restart: unless-stopped
+    depends_on:
+      pangolin:
+        condition: service_healthy
+    command:
+      - --reachableAt=http://gerbil:3003
+      - --generateAndSaveKeyTo=/var/config/key
+      - --remoteConfig=http://pangolin:3001/api/v1/
+    volumes:
+      - pangolin-config:/var/config # Changed to a named volume
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
+    ports:
+      - 51820:51820/udp
+      - 21820:21820/udp
+    networks:
+      - pangolin-network
+
+volumes:
+  pangolin-data:
+  pangolin-config: # Define the new named volume
+
+networks:
+  pangolin-network:
+    name: ${NETWORK_NAME:-pangolin-network}
+    external: ${NETWORK_EXTERNAL:-true}
