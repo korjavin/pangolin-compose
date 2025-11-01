@@ -17,7 +17,12 @@ services:
       server:
         secret: "$$SECRET"
       gerbil:
+        start_port: 51820
         base_endpoint: "$$PANGOLIN_HOST"
+        use_subdomain: false
+        subnet_group: "100.89.128.0/20"
+        block_size: 24
+        site_block_size: 30
       flags:
         require_email_verification: false
         disable_signup_without_invite: true
