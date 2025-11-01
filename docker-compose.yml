@@ -4,22 +4,18 @@ services:
     command: >
       bash -c "
         if [ ! -f /config/config.yml ]; then
-          if [ -z \"$PANGOLIN_HOST\" ]; then
-            echo 'Error: PANGOLIN_HOST environment variable is not set.'
-            exit 1
-          fi
           SECRET=$(openssl rand -hex 32)
           cat > /config/config.yml <<EOF
         app:
-          dashboard_url: \"https://$PANGOLIN_HOST\"
+          dashboard_url: "https://$PANGOLIN_HOST"
         domains:
           domain1:
-            base_domain: \"$PANGOLIN_HOST\"
-            cert_resolver: \"myresolver\"
+            base_domain: "$PANGOLIN_HOST"
+            cert_resolver: "myresolver"
         server:
-          secret: \"$SECRET\"
+          secret: "$SECRET"
         gerbil:
-          base_endpoint: \"$PANGOLIN_HOST\"
+          base_endpoint: "$PANGOLIN_HOST"
         flags:
           require_email_verification: false
           disable_signup_without_invite: true
@@ -30,6 +26,8 @@ services:
           echo 'config.yml already exists.'
         fi
       "
+    environment:
+      - PANGOLIN_HOST=${PANGOLIN_HOST}
     volumes:
       - pangolin-config:/config
 
