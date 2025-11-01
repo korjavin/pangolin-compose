@@ -72,26 +72,26 @@ services:
       - "traefik.http.routers.pangolin-api.service=pangolin-api"
       - "traefik.http.services.pangolin-api.loadbalancer.server.port=3000"
 
-  gerbil:
-    image: fosrl/gerbil:1.2.2
-    container_name: gerbil
-    restart: unless-stopped
-    depends_on:
-      pangolin:
-        condition: service_healthy
-    command:
-      - --reachableAt=http://gerbil:3003
-      - --generateAndSaveKeyTo=/var/config/key
-      - --remoteConfig=http://pangolin:3000/api/v1/
-    volumes:
-      - pangolin-config:/var/config
-    cap_add:
-      - NET_ADMIN
-    ports:
-      - 51820:51820/udp
-      - 21820:21820/udp
-    networks:
-      - pangolin-network
+  # gerbil:
+  #   image: fosrl/gerbil:1.2.2
+  #   container_name: gerbil
+  #   restart: unless-stopped
+  #   depends_on:
+  #     pangolin:
+  #       condition: service_healthy
+  #   command:
+  #     - --reachableAt=http://gerbil:3003
+  #     - --generateAndSaveKeyTo=/var/config/key
+  #     - --remoteConfig=http://pangolin:3000/api/v1/
+  #   volumes:
+  #     - pangolin-config:/var/config
+  #   cap_add:
+  #     - NET_ADMIN
+  #   ports:
+  #     - 51820:51820/udp
+  #     - 21820:21820/udp
+  #   networks:
+  #     - pangolin-network
 
 volumes:
   pangolin-data:
