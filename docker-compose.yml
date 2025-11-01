@@ -53,6 +53,7 @@ services:
       - "traefik.http.routers.pangolin.rule=Host(`${PANGOLIN_HOST}`)"
       - "traefik.http.routers.pangolin.entrypoints=websecure"
       - "traefik.http.routers.pangolin.tls.certresolver=myresolver"
+      - "traefik.http.services.pangolin.loadbalancer.server.port=3001"
 
   gerbil:
     image: fosrl/gerbil:1.2.2
