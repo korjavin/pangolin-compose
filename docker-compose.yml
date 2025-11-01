@@ -4,7 +4,6 @@ services:
     container_name: pangolin
     restart: unless-stopped
     volumes:
-      - pangolin-config:/app/config # Changed to a named volume
       - pangolin-data:/var/certificates
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:3001/api/v1/"]
@@ -13,6 +12,14 @@ services:
       retries: 15
     environment:
       - PANGOLIN_HOST=${PANGOLIN_HOST}
+      - APP_DASHBOARD_URL=https://${PANGOLIN_HOST}
+      - DOMAINS_DOMAIN1_BASE_DOMAIN=${PANGOLIN_HOST}
+      - DOMAINS_DOMAIN1_CERT_RESOLVER=myresolver
+      - SERVER_SECRET=${SERVER_SECRET}
+      - GERBIL_BASE_ENDPOINT=${PANGOLIN_HOST}
+      - FLAGS_REQUIRE_EMAIL_VERIFICATION=false
+      - FLAGS_DISABLE_SIGNUP_WITHOUT_INVITE=true
+      - FLAGS_DISABLE_USER_CREATE_ORG=true
     networks:
       - pangolin-network
     labels:
@@ -33,7 +40,7 @@ services:
       - --generateAndSaveKeyTo=/var/config/key
       - --remoteConfig=http://pangolin:3001/api/v1/
     volumes:
-      - pangolin-config:/var/config # Changed to a named volume
+      - pangolin-data:/var/config
     cap_add:
       - NET_ADMIN
       - SYS_MODULE
@@ -45,7 +52,6 @@ services:
 
 volumes:
   pangolin-data:
-  pangolin-config: # Define the new named volume
 
 networks:
   pangolin-network:
