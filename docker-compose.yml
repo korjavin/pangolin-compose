@@ -1,5 +1,8 @@
 services:
   config-generator:
+    environment:
+      - PANGOLIN_HOST = ${PANGOLIN_HOST}
+      - SECRET = ${SERVER_SECRET}
     image: bash
     command: >
       bash -c "
@@ -26,8 +29,6 @@ services:
           echo 'config.yml already exists.'
         fi
       "
-    environment:
-      - PANGOLIN_HOST=${PANGOLIN_HOST}
     volumes:
       - pangolin-config:/config
 
