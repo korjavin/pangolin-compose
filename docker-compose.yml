@@ -57,15 +57,17 @@ services:
       - pangolin-network
     labels:
       - "traefik.enable=true"
-      # Web UI router - everything except /api
-      - "traefik.http.routers.pangolin.rule=Host(`${PANGOLIN_HOST}`)"
+      # Web UI router - main domain and all subdomains (except /api paths)
+      - "traefik.http.routers.pangolin.rule=Host(`${PANGOLIN_HOST}`) || HostRegexp(`{subdomain:[a-z0-9-]+}.${PANGOLIN_HOST}`)"
       - "traefik.http.routers.pangolin.entrypoints=websecure"
       - "traefik.http.routers.pangolin.tls.certresolver=myresolver"
+      - "traefik.http.routers.pangolin.tls.domains[0].main=${PANGOLIN_HOST}"
+      - "traefik.http.routers.pangolin.tls.domains[0].sans=*.${PANGOLIN_HOST}"
       - "traefik.http.routers.pangolin.priority=1"
       - "traefik.http.routers.pangolin.service=pangolin-web"
       - "traefik.http.services.pangolin-web.loadbalancer.server.port=3002"
-      # API router - /api/* paths
-      - "traefik.http.routers.pangolin-api.rule=Host(`${PANGOLIN_HOST}`) && PathPrefix(`/api`)"
+      # API router - /api/* paths on main domain and subdomains
+      - "traefik.http.routers.pangolin-api.rule=(Host(`${PANGOLIN_HOST}`) || HostRegexp(`{subdomain:[a-z0-9-]+}.${PANGOLIN_HOST}`)) && PathPrefix(`/api`)"
       - "traefik.http.routers.pangolin-api.entrypoints=websecure"
       - "traefik.http.routers.pangolin-api.tls.certresolver=myresolver"
       - "traefik.http.routers.pangolin-api.priority=2"
