@@ -61,8 +61,6 @@ services:
       - "traefik.http.routers.pangolin.rule=Host(`${PANGOLIN_HOST}`) || HostRegexp(`{subdomain:[a-z0-9-]+}.${PANGOLIN_HOST}`)"
       - "traefik.http.routers.pangolin.entrypoints=websecure"
       - "traefik.http.routers.pangolin.tls.certresolver=myresolver"
-      - "traefik.http.routers.pangolin.tls.domains[0].main=${PANGOLIN_HOST}"
-      - "traefik.http.routers.pangolin.tls.domains[0].sans=*.${PANGOLIN_HOST}"
       - "traefik.http.routers.pangolin.priority=1"
       - "traefik.http.routers.pangolin.service=pangolin-web"
       - "traefik.http.services.pangolin-web.loadbalancer.server.port=3002"
