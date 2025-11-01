@@ -42,7 +42,7 @@ services:
       - pangolin-config:/app/config
       - pangolin-data:/var/certificates
     ports:
-      - 3001:3001
+      - 3002:3002
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:3001/api/v1/"]
       interval: "3s"
@@ -55,7 +55,7 @@ services:
       - "traefik.http.routers.pangolin.rule=Host(`${PANGOLIN_HOST}`)"
       - "traefik.http.routers.pangolin.entrypoints=websecure"
       - "traefik.http.routers.pangolin.tls.certresolver=myresolver"
-      - "traefik.http.services.pangolin.loadbalancer.server.port=3001"
+      - "traefik.http.services.pangolin.loadbalancer.server.port=3002"
 
   gerbil:
     image: fosrl/gerbil:1.2.2
