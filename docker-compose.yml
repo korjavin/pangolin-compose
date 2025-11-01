@@ -6,27 +6,27 @@ services:
     image: bash
     command: |
       bash -c '
-      if [ ! -f /config/config.yml ]; then
-        cat > /config/config.yml <<EOF
-app:
-  dashboard_url: "https://$PANGOLIN_HOST"
-domains:
-  domain1:
-    base_domain: "$PANGOLIN_HOST"
-    cert_resolver: "myresolver"
-server:
-  secret: "$SECRET"
-gerbil:
-  base_endpoint: "$PANGOLIN_HOST"
-flags:
-  require_email_verification: false
-  disable_signup_without_invite: true
-  disable_user_create_org: true
-EOF
-        echo "config.yml generated successfully."
-      else
-        echo "config.yml already exists."
-      fi
+        if [ ! -f /config/config.yml ]; then
+          cat > /config/config.yml <<EOF
+      app:
+        dashboard_url: "https://$PANGOLIN_HOST"
+      domains:
+        domain1:
+          base_domain: "$PANGOLIN_HOST"
+          cert_resolver: "myresolver"
+      server:
+        secret: "$SECRET"
+      gerbil:
+        base_endpoint: "$PANGOLIN_HOST"
+      flags:
+        require_email_verification: false
+        disable_signup_without_invite: true
+        disable_user_create_org: true
+      EOF
+          echo "config.yml generated successfully."
+        else
+          echo "config.yml already exists."
+        fi
       '
     volumes:
       - pangolin-config:/config
