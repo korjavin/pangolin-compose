@@ -41,6 +41,8 @@ services:
     volumes:
       - pangolin-config:/app/config
       - pangolin-data:/var/certificates
+    ports:
+      - 3001:3001
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:3001/api/v1/"]
       interval: "3s"
