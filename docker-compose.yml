@@ -4,7 +4,7 @@ services:
       - PANGOLIN_HOST=${PANGOLIN_HOST}
       - SECRET=${SERVER_SECRET}
     image: bash
-    command: >
+    command: |
       bash -c "
         if [ ! -f /config/config.yml ]; then
           cat > /config/config.yml <<EOF
